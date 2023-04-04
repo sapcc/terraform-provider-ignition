@@ -3,7 +3,7 @@ package ignition
 import (
 	"encoding/json"
 
-	"github.com/coreos/ignition/v2/config/v3_1/types"
+	"github.com/coreos/ignition/v2/config/v3_4/types"
 	"github.com/coreos/ignition/v2/config/validate"
 	"github.com/coreos/vcontext/path"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -82,7 +82,10 @@ func buildLink(d *schema.ResourceData) (string, error) {
 	overwrite := d.Get("overwrite").(bool)
 	link.Overwrite = &overwrite
 
-	link.Target = d.Get("target").(string)
+	target := d.Get("target").(string)
+	if target != "" {
+		link.Target = &target
+	}
 
 	hard, hasHard := d.GetOk("hard")
 	if hasHard {
